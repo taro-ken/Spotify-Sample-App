@@ -103,32 +103,6 @@ final class API {
         }
     }
     
-    func getCurrentUserProfile(completion: @escaping (Result<UserModel, Error>) -> Void) {
-        
-        guard UserDefaults.standard.spotifyAccessToken != "" else { return }
-        
-        guard let url = URL(string: baseAPIURL + "/me") else {
-            completion(.failure(APIError.urlError))
-            return
-        }
-        let headers: HTTPHeaders = [
-            "Authorization": "Bearer \(UserDefaults.standard.spotifyAccessToken)"
-        ]
-        
-        AF.request(url, method: .get, headers: headers).responseJSON { (response) in
-            do {
-                guard let _data = response.data else { return }
-                let result = try JSONDecoder().decode(UserModel.self, from: _data)
-                print(result)
-                completion(.success(result))
-            } catch let error {
-                print(error.localizedDescription)
-                completion(.failure(error))
-            }
-        }
-    }
-    
-    
     func getPlayList(completion: @escaping (Result<[item], Error>) -> Void) {
         
         guard UserDefaults.standard.spotifyAccessToken != "" else { return }
