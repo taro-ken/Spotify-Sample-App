@@ -8,7 +8,7 @@
 import UIKit
 
 final class LoginViewController: UIViewController {
-
+    
     @IBOutlet private weak var authButton: UIButton! {
         didSet {
             authButton.addTarget(self, action: #selector(tapAuthButton), for: .touchUpInside)
@@ -21,9 +21,9 @@ final class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
     }
-
+    
     func openURL(url: URL) {
         guard let queryItems = URLComponents(string: url.absoluteString)?.queryItems,
               let code = queryItems.first(where: {$0.name == "code"})?.value,
@@ -32,8 +32,8 @@ final class LoginViewController: UIViewController {
         else {
             return
         }
-
-    // `code`を引数として渡して、トークンリクエストをする
+        
+        // `code`を引数として渡して、トークンリクエストをする
         API.shared.postAuthorizationCode(code: code) { accessToken, error in
             if let _error = error {
                 print(_error.localizedDescription)
@@ -41,14 +41,14 @@ final class LoginViewController: UIViewController {
             }
             guard let _accessToken = accessToken,
                   let vc = UIStoryboard.init(name: "List", bundle: nil).instantiateInitialViewController()
-                  else {
+            else {
                 return
             }
-        // キーを保持
+            // キーを保持
             UserDefaults.standard.spotifyAccessToken = _accessToken.access_token
             self.navigationController?.pushViewController(vc, animated: true)
         }
     }
-
+    
 }
 
